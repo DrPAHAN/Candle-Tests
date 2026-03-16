@@ -51,6 +51,10 @@ TEST(CandleTest, BodySize_Green) { Candle c(100,110,90,105); EXPECT_DOUBLE_EQ(c.
 TEST(CandleTest, BodySize_Red) { Candle c(105,110,90,100); EXPECT_DOUBLE_EQ(c.body_size(), 5.0); }
 TEST(CandleTest, BodySize_Doji) { Candle c(100,110,90,100); EXPECT_DOUBLE_EQ(c.body_size(), 0.0); }
 
+TEST(CandleTest, IsRed_True) { Candle c(105,110,90,100); EXPECT_TRUE(c.is_red()); EXPECT_FALSE(c.is_green()); }
+TEST(CandleTest, IsRed_FalseGreen) { Candle c(100,110,90,105); EXPECT_FALSE(c.is_red()); }
+TEST(CandleTest, IsRed_FalseDoji) { Candle c(100,110,90,100); EXPECT_FALSE(c.is_red()); }
+
 int main(int argc, char **argv) {
   ::testing::InitGoogleTest(&argc, argv);
   return RUN_ALL_TESTS();
