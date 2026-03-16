@@ -1,72 +1,65 @@
-﻿#include <vector>
-#include <functional>
-#include <iostream>
+﻿#include "candle.h"
+#include <gtest/gtest.h>
 
-#include "tests.h"
-
-//массив всех тестов, который мы заполняем в функции initTests
-static std::vector<std::function<bool()>> tests;
-
-//тест 1
-bool test1()
-{
-  //пример какого-то теста
-  return 42 == (41 + 1); //passed
+// 2.1. 3 теста для body_contains
+TEST(CandleTest, BodyContains_GreenCandle) {
+  Candle c(100.0, 110.0, 90.0, 105.0);
+  EXPECT_TRUE(c.body_contains(100.0));
+  EXPECT_TRUE(c.body_contains(105.0));
+  EXPECT_FALSE(c.body_contains(99.9));
 }
 
-//тест 2
-bool test2()
-{
-  //пример какого-то теста
-  return 42 != (41 + 1); //failed
+TEST(CandleTest, BodyContains_RedCandle) {
+  Candle c(105.0, 110.0, 90.0, 100.0);
+  EXPECT_TRUE(c.body_contains(100.0));
+  EXPECT_TRUE(c.body_contains(105.0));
+  EXPECT_FALSE(c.body_contains(105.1));
 }
 
-//тест 3
-bool test3()
-{
-  Candle candle{ 0.0, 3.0, 3.0, 3.0 };
-
-  //пример какого-то теста
-  return candle.high == 3.0;
+TEST(CandleTest, BodyContains_DojiBoundary) {
+  Candle c(100.0, 110.0, 90.0, 100.0);
+  EXPECT_TRUE(c.body_contains(100.0));
+  EXPECT_FALSE(c.body_contains(99.9));
+  EXPECT_FALSE(c.body_contains(100.1));
 }
 
-void initTests()
-{
-  tests.push_back(test1);
-  tests.push_back(test2);
-  tests.push_back(test3);
-  //tests.push_back(test4);
-  //tests.push_back(test5);
+TEST(CandleTest, Contains_InsideFullRange) {
+  Candle c(100.0, 110.0, 90.0, 105.0);
+  EXPECT_TRUE(c.contains(95.0));
+  EXPECT_TRUE(c.contains(90.0));
+  EXPECT_TRUE(c.contains(110.0));
 }
 
-int launchTests()
-{
-  int total = 0;
-  int passed = 0;
-
-  for (const auto& test : tests)
-  {
-    std::cout << "test #" << (total + 1);
-    if (test())
-    {
-      passed += 1;
-      std::cout << " passed\n";
-    }
-    else
-    {
-      std::cout << " failed\n";
-    }
-    total += 1;
-  }
-
-  std::cout << "\ntests " << passed << "/" << total << " passed!" << std::endl;
-
-  //0 = success
-  return total - passed;
+TEST(CandleTest, Contains_Boundary) {
+  Candle c(100.0, 110.0, 90.0, 105.0);
+  EXPECT_TRUE(c.contains(90.0));
+  EXPECT_TRUE(c.contains(110.0));
+  EXPECT_FALSE(c.contains(89.9));
 }
 
-int main()
-{
-  initTests();
-  return launchTests();
+TEST(CandleTest, Contains_Outside) {
+  Candle c(100.0, 110.0, 90.0, 105.0);
+  EXPECT_FALSE(c.contains(111.0));
+  EXPECT_FALSE(c.contains(89.0));
+}
+
+TEST(CandleTest, FullSize_Normal) { Candle c(100,110,90,105); EXPECT_DOUBLE_EQ(c.full_size(), 20.0); }
+TEST(CandleTest, FullSize_Zero) { Candle c(100,100,100,100); EXPECT_DOUBLE_EQ(c.full_size(), 0.0); }
+TEST(CandleTest, FullSize_Big) { Candle c(100,150,50,100); EXPECT_DOUBLE_EQ(c.full_size(), 100.0); }
+
+TEST(CandleTest, BodySize_Green) { Candle c(100,110,90,105); EXPECT_DOUBLE_EQ(c.body_size(), 5.0); }
+TEST(CandleTest, BodySize_Red) { Candle c(105,110,90,100); EXPECT_DOUBLE_EQ(c.body_size(), 5.0); }
+TEST(CandleTest, BodySize_Doji) { Candle c(100,110,90,100); EXPECT_DOUBLE_EQ(c.body_size(), 0.0); }
+
+TEST(CandleTest, IsRed_True) { Candle c(105,110,90,100); EXPECT_TRUE(c.is_red()); EXPECT_FALSE(c.is_green()); }
+TEST(CandleTest, IsRed_FalseGreen) { Candle c(100,110,90,105); EXPECT_FALSE(c.is_red()); }
+TEST(CandleTest, IsRed_FalseDoji) { Candle c(100,110,90,100); EXPECT_FALSE(c.is_red()); }
+
+TEST(CandleTest, IsGreen_True) { Candle c(100,110,90,105); EXPECT_TRUE(c.is_green()); EXPECT_FALSE(c.is_red()); }
+TEST(CandleTest, IsGreen_FalseRed) { Candle c(105,110,90,100); EXPECT_FALSE(c.is_green()); }
+TEST(CandleTest, IsGreen_FalseDoji) { Candle c(100,110,90,100); EXPECT_FALSE(c.is_green()); }
+
+int main(int argc, char **argv) {
+  ::testing::InitGoogleTest(&argc, argv);
+  return RUN_ALL_TESTS();
 }
