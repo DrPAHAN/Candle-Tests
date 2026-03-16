@@ -43,6 +43,10 @@ TEST(CandleTest, Contains_Outside) {
   EXPECT_FALSE(c.contains(89.0));
 }
 
+TEST(CandleTest, FullSize_Normal) { Candle c(100,110,90,105); EXPECT_DOUBLE_EQ(c.full_size(), 20.0); }
+TEST(CandleTest, FullSize_Zero) { Candle c(100,100,100,100); EXPECT_DOUBLE_EQ(c.full_size(), 0.0); }
+TEST(CandleTest, FullSize_Big) { Candle c(100,150,50,100); EXPECT_DOUBLE_EQ(c.full_size(), 100.0); }
+
 int main(int argc, char **argv) {
   ::testing::InitGoogleTest(&argc, argv);
   return RUN_ALL_TESTS();
