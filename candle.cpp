@@ -2,6 +2,7 @@
 
 #include <string>
 #include <stdexcept>
+#include <cmath>  // ← исправление ошибки (std::abs)
 
 Candle::Candle(Price _open, Price _high, Price _low, Price _close)
 	: open(_open)
