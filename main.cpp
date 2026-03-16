@@ -55,6 +55,10 @@ TEST(CandleTest, IsRed_True) { Candle c(105,110,90,100); EXPECT_TRUE(c.is_red())
 TEST(CandleTest, IsRed_FalseGreen) { Candle c(100,110,90,105); EXPECT_FALSE(c.is_red()); }
 TEST(CandleTest, IsRed_FalseDoji) { Candle c(100,110,90,100); EXPECT_FALSE(c.is_red()); }
 
+TEST(CandleTest, IsGreen_True) { Candle c(100,110,90,105); EXPECT_TRUE(c.is_green()); EXPECT_FALSE(c.is_red()); }
+TEST(CandleTest, IsGreen_FalseRed) { Candle c(105,110,90,100); EXPECT_FALSE(c.is_green()); }
+TEST(CandleTest, IsGreen_FalseDoji) { Candle c(100,110,90,100); EXPECT_FALSE(c.is_green()); }
+
 int main(int argc, char **argv) {
   ::testing::InitGoogleTest(&argc, argv);
   return RUN_ALL_TESTS();
