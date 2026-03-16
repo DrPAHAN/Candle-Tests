@@ -1,72 +1,29 @@
-﻿#include <vector>
-#include <functional>
-#include <iostream>
+﻿#include "candle.h"
+#include <gtest/gtest.h>
 
-#include "tests.h"
-
-//массив всех тестов, который мы заполняем в функции initTests
-static std::vector<std::function<bool()>> tests;
-
-//тест 1
-bool test1()
-{
-  //пример какого-то теста
-  return 42 == (41 + 1); //passed
+// 2.1. 3 теста для body_contains
+TEST(CandleTest, BodyContains_GreenCandle) {
+  Candle c(100.0, 110.0, 90.0, 105.0);
+  EXPECT_TRUE(c.body_contains(100.0));
+  EXPECT_TRUE(c.body_contains(105.0));
+  EXPECT_FALSE(c.body_contains(99.9));
 }
 
-//тест 2
-bool test2()
-{
-  //пример какого-то теста
-  return 42 != (41 + 1); //failed
+TEST(CandleTest, BodyContains_RedCandle) {
+  Candle c(105.0, 110.0, 90.0, 100.0);
+  EXPECT_TRUE(c.body_contains(100.0));
+  EXPECT_TRUE(c.body_contains(105.0));
+  EXPECT_FALSE(c.body_contains(105.1));
 }
 
-//тест 3
-bool test3()
-{
-  Candle candle{ 0.0, 3.0, 3.0, 3.0 };
-
-  //пример какого-то теста
-  return candle.high == 3.0;
+TEST(CandleTest, BodyContains_DojiBoundary) {
+  Candle c(100.0, 110.0, 90.0, 100.0);
+  EXPECT_TRUE(c.body_contains(100.0));
+  EXPECT_FALSE(c.body_contains(99.9));
+  EXPECT_FALSE(c.body_contains(100.1));
 }
 
-void initTests()
-{
-  tests.push_back(test1);
-  tests.push_back(test2);
-  tests.push_back(test3);
-  //tests.push_back(test4);
-  //tests.push_back(test5);
-}
-
-int launchTests()
-{
-  int total = 0;
-  int passed = 0;
-
-  for (const auto& test : tests)
-  {
-    std::cout << "test #" << (total + 1);
-    if (test())
-    {
-      passed += 1;
-      std::cout << " passed\n";
-    }
-    else
-    {
-      std::cout << " failed\n";
-    }
-    total += 1;
-  }
-
-  std::cout << "\ntests " << passed << "/" << total << " passed!" << std::endl;
-
-  //0 = success
-  return total - passed;
-}
-
-int main()
-{
-  initTests();
-  return launchTests();
+int main(int argc, char **argv) {
+  ::testing::InitGoogleTest(&argc, argv);
+  return RUN_ALL_TESTS();
 }
