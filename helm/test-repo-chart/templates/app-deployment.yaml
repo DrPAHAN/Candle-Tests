@@ -1,0 +1,18 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: candle-app
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: candle-app
+  template:
+    metadata:
+      labels:
+        app: candle-app
+    spec:
+      containers:
+      - name: app
+        image: drpahan/test-repo-app:latest
+        imagePullPolicy: Always

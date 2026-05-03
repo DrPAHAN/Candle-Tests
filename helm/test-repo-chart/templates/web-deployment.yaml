@@ -1,0 +1,21 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: candle-web
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: candle-web
+  template:
+    metadata:
+      labels:
+        app: candle-web
+    spec:
+      serviceAccountName: web-log-reader   # для доступа к kubectl logs
+      containers:
+      - name: web
+        image: drpahan/test-repo-web:latest
+        imagePullPolicy: Always
+        ports:
+        - containerPort: 80
