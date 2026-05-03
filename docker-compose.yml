@@ -1,0 +1,20 @@
+version: '3.8'
+
+services:
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile.app
+    container_name: test-repo_app
+    restart: on-failure
+
+  web:
+    build:
+      context: .
+      dockerfile: Dockerfile.web
+    container_name: test-repo_web
+    depends_on:
+      - app
+    ports:
+      - "80:80"
+    restart: always
