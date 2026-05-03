@@ -3,7 +3,7 @@ kind: Deployment
 metadata:
   name: candle-web
 spec:
-  replicas: 1
+  replicas: {{ .Values.web.replicaCount }}
   selector:
     matchLabels:
       app: candle-web
@@ -12,10 +12,10 @@ spec:
       labels:
         app: candle-web
     spec:
-      serviceAccountName: web-log-reader   # для доступа к kubectl logs
+      serviceAccountName: web-log-reader
       containers:
       - name: web
-        image: drpahan/test-repo-web:latest
+        image: {{ .Values.web.image }}
         imagePullPolicy: Always
         ports:
         - containerPort: 80

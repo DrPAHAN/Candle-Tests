@@ -1,8 +1,8 @@
-name: Docker Build & Push
+name: Docker + Helm CI/CD
 
 on:
   push:
-    branches: [ feature/docker-web-hub ]
+    branches: [ feature/k8s-helm ]
 
 jobs:
   build-and-push:
@@ -17,7 +17,7 @@ jobs:
           username: ${{ secrets.DOCKERHUB_USERNAME }}
           password: ${{ secrets.DOCKERHUB_TOKEN }}
 
-      - name: Build and push app
+      - name: Build and push app image
         uses: docker/build-push-action@v5
         with:
           context: .
@@ -25,10 +25,22 @@ jobs:
           push: true
           tags: ${{ secrets.DOCKERHUB_USERNAME }}/test-repo-app:latest
 
-      - name: Build and push web
+      - name: Build and push web image
         uses: docker/build-push-action@v5
         with:
           context: .
           file: ./Dockerfile.web
           push: true
           tags: ${{ secrets.DOCKERHUB_USERNAME }}/test-repo-web:latest
+
+      - name: Setup Helm
+        uses: azure/setup-helm@v4
+
+      - name: Package Helm Chart
+        run: helm package helm/test-repo-chart
+
+      - name: Upload Helm Chart to Release
+        uses: softprops/action-gh-release@v1
+        with:
+          files: test-repo-chart-*.tgz
+          tag_name: helm-chart

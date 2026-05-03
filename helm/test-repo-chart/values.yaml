@@ -1,9 +1,9 @@
 app:
-  image: drpahan/test-repo-app:latest
+  image: "drpahan/test-repo-app:latest"
   replicaCount: 1
 
 web:
-  image: drpahan/test-repo-web:latest
+  image: "drpahan/test-repo-web:latest"
   replicaCount: 1
 
 service:
