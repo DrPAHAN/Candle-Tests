@@ -1,0 +1,10 @@
+.git
+.gitignore
+.github
+build/
+CMakeCache.txt
+CMakeFiles/
+*.o
+*.a
+*.so
+.DS_Store
