@@ -12,4 +12,5 @@ COPY . .
 RUN cmake -B build -S . -DCMAKE_BUILD_TYPE=Release
 RUN cmake --build build --config Release
 
-CMD ["./build/testproj"]
+# Важно: запускаем тесты и оставляем контейнер работать
+CMD ./build/testproj && echo "Tests completed successfully" && sleep infinity
